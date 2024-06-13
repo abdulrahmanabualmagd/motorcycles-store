@@ -9,7 +9,7 @@ const Repository = require(path.join(__dirname, "../../repository/mongoose/mongo
 module.exports = async () => {
     db = {};
     try {
-        await mongoose.connect(process.env.DB_MONGOOSE_URL);
+        await mongoose.connect(process.env.DB_MONGOOSE_URL, process.env.DB_APP_NAME);
         console.log("# Mongoose Database Connected! #");
 
         // Importing Mongoose Models

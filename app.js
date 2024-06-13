@@ -22,15 +22,12 @@ app.listen(process.env.PORT, () => {
     console.log(`http://localhost:${process.env.PORT}`);
 });
 
-// const { dbIdentity } = require("./config/database");
+const { dbApplication } = require("./config/database");
 
-// (async () => {
-//     const db = await dbIdentity;
-//     try {
-//         await db.sequelize.sync({
-//             force: true,
-//         });
-//     } catch (err) {
-//         err.message;
-//     }
-// })();
+(async () => {
+    const db = await dbApplication;
+    try {
+    } catch (err) {
+        err.message;
+    }
+})();
