@@ -1,3 +1,8 @@
+/*
+    Choosing which database are going to be used 
+    Routers => Controllers => Services => [This File] => Models Index(Database Access)
+*/
+
 require("dotenv").config();
 const path = require("path");
 

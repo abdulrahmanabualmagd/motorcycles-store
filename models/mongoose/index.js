@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const fs = require("fs");
+const fs = require("fs").promises; // Use the promises version of fs
 const path = require("path");
 const basename = path.basename(__filename);
 const Repository = require(path.join(__dirname, "../../repository/mongoose/mongoose-repo.js"));
@@ -9,24 +9,28 @@ const Repository = require(path.join(__dirname, "../../repository/mongoose/mongo
 module.exports = async () => {
     db = {};
     try {
-        await mongoose.connect(process.env.DB_MONGOOSE_URL, process.env.DB_APP_NAME);
+        await mongoose.connect(process.env.DB_MONGOOSE_URL, { dbName: process.env.DB_APP_NAME });
         console.log("# Mongoose Database Connected! #");
 
         // Importing Mongoose Models
-        fs.readdirSync(__dirname)
+        const files = await fs.readdir(__dirname);
+        const modelPromises = files
             .filter((file) => {
                 return (
                     file.indexOf(".") !== 0 && // Avoid hidden files
                     file !== basename && // Exclude current file
-                    path.extname(file) === ".js" && // Check for .js extension or we can use [file.slice(-3) === ".js" &&]
+                    path.extname(file) === ".js" && // Check for .js extension
                     file.indexOf(".test.js") === -1 // Exclude test files
                 );
             })
-            .forEach((file) => {
+            .map(async (file) => {
                 const model = require(path.join(__dirname, file))(mongoose);
                 db[model.modelName] = model; // In mongoose => [model.modelName] | In sequelize => [model.name]
-                db[model.name].repo = new Repository(model); // Repository
+                db[model.modelName].repo = new Repository(model); // Repository
             });
+
+        await Promise.all(modelPromises);
+
     } catch (err) {
         console.log(err.message);
     }
