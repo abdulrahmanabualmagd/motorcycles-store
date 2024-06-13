@@ -1,0 +1,15 @@
+1- Install all packages using node package manger 
+   $ npm i
+
+2 - Before starting you have to fill the environment variable in the .env file which located in the root directory
+
+3 - create the identity database (sequelize) (I'm using mssql)
+   $ npx sequelize-cli db:create --config=config/identity-config.js
+
+4 - migrate identity tables tables
+   $ npx sequelize-cli db:migrate --config=config/identity-config.js
+
+5 - seed the identity initial data (Roles & Permissions) (sequelize)
+   $ npx sequelize-cli db:seed:all --seeders-path seeders/sequelizeIdentity --config=config/identity-config.js
+
+   
