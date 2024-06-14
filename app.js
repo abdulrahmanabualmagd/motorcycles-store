@@ -1,5 +1,4 @@
 const express = require("express");
-
 const { notFoundHandler } = require("./middlewares/notFoundHandler");
 const { errorHandler } = require("./middlewares/errorHandler");
 const app = express();
@@ -10,8 +9,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.text());
 app.use(express.raw());
 
-// Routes
-app.use("/auth", require("./routers/authRouters"));
+// Identity Routes
+app.use("/auth", require("./routers/identity/authRouters"));
+
+// Application Routes
+app.use("/customer",require('./routers/application/customerRouter') );
+app.use("/receipt", require('./routers/application/receiptRouter'));
+app.use("/motorcycle",require('./routers/application/motorcycleRouter') );
+app.use("/rentalagreement",require('./routers/application/rentalAgreementRouter') );
+app.use("/rentalcompany", require('./routers/application/rentalCompanyRouter'));
 
 // Handlers
 app.all("*", notFoundHandler);

@@ -1,9 +1,9 @@
-const services = require("./../services/authService");
-const { passwordResetMail } = require("../../services/mailerService");
+const authService = require("./../../services/identity/authService");
+const { passwordResetMail } = require("./../../services/identity/mailerService");
 
 exports.loginController = async (req, res, next) => {
     try {
-        const token = await services.loginService(req, res);
+        const token = await authService.loginService(req, res);
         res.send(token);
     } catch (err) {
         next(err);
@@ -12,7 +12,7 @@ exports.loginController = async (req, res, next) => {
 
 exports.registerController = async (req, res, next) => {
     try {
-        const user = await services.registerService(req, res, next);
+        const user = await authService.registerService(req, res, next);
         res.send(user);
     } catch (err) {
         next(err);
@@ -22,7 +22,7 @@ exports.registerController = async (req, res, next) => {
 exports.resetPasswordGetTokenController = async (req, res, next) => {
     try {
         // Get Token for User
-        const token = await services.resetPasswordGetTokenService(req, res, next);
+        const token = await authService.resetPasswordGetTokenService(req, res, next);
 
         // Send email for user
         await passwordResetMail(req.body.email, token);
@@ -34,7 +34,7 @@ exports.resetPasswordGetTokenController = async (req, res, next) => {
 
 exports.resetPasswordVerifyTokenController = async (req, res, next) => {
     try {
-        const token = await services.resetPasswordVerifyTokenService(req, res, next);
+        const token = await authService.resetPasswordVerifyTokenService(req, res, next);
         res.send(token);
     } catch (err) {
         next(err);

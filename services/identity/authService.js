@@ -1,7 +1,7 @@
-const { dbIdentity } = require("../config/database");
-const { hashPassword, verifyPassword } = require("../utils/passwordUtils");
-const { createToken } = require("../utils/tokenUtils");
-const { passwordResetToken, checkRecentToken, checkExpiration } = require("../utils/passwordResetUtils");
+const { dbIdentity } = require("./../../config/database");
+const { hashPassword, verifyPassword } = require("./../../utils/passwordUtils");
+const { createToken } = require("./../../utils/tokenUtils");
+const { passwordResetToken, checkRecentToken, checkExpiration } = require("./../../utils/passwordResetUtils");
 
 // ------------------------------- [ Register ] -------------------------------
 exports.registerService = async (req, res, next) => {
