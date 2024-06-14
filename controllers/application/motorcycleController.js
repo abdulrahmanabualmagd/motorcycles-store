@@ -1,57 +1,57 @@
 /*
-    This layer only responsible for responses, the services are responsible for the databbase access
+    Controllers only responsible for the final responses, the services are responsible for the databbase access
 */
 
-// Import the Receipt Service
+// Import the Motorcycle Service
 
-// Receipt Crud Operation 
-exports.createReceipt = async (req, res) => {
+// Motorcycle Crud Operation
+exports.createMotorcycle = async (req, res) => {
     try {
-        const receipt = await receiptService.createReceipt(req.body);
-        res.status(201).json(receipt);
+        const motorcycle = await motorcycleService.createMotorcycle(req.body);
+        res.status(201).json(motorcycle);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-exports.getReceipt = async (req, res) => {
+exports.getMotorcycle = async (req, res) => {
     try {
-        const receipt = await receiptService.getReceipt(req.params.id);
-        if (!receipt) {
-            return res.status(404).json({ message: 'Receipt not found' });
+        const motorcycle = await motorcycleService.getMotorcycle(req.params.id);
+        if (!motorcycle) {
+            return res.status(404).json({ message: "Motorcycle not found" });
         }
-        res.status(200).json(receipt);
+        res.status(200).json(motorcycle);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-exports.getAllReceipts = async (req, res) => {
+exports.getAllMotorcycles = async (req, res) => {
     try {
-        const receipts = await receiptService.getAllReceipts();
-        res.status(200).json(receipts);
+        const motorcycles = await motorcycleService.getAllMotorcycles();
+        res.status(200).json(motorcycles);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-exports.updateReceipt = async (req, res) => {
+exports.updateMotorcycle = async (req, res) => {
     try {
-        const receipt = await receiptService.updateReceipt(req.params.id, req.body);
-        if (!receipt) {
-            return res.status(404).json({ message: 'Receipt not found' });
+        const motorcycle = await motorcycleService.updateMotorcycle(req.params.id, req.body);
+        if (!motorcycle) {
+            return res.status(404).json({ message: "Motorcycle not found" });
         }
-        res.status(200).json(receipt);
+        res.status(200).json(motorcycle);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-exports.deleteReceipt = async (req, res) => {
+exports.deleteMotorcycle = async (req, res) => {
     try {
-        const receipt = await receiptService.deleteReceipt(req.params.id);
-        if (!receipt) {
-            return res.status(404).json({ message: 'Receipt not found' });
+        const motorcycle = await motorcycleService.deleteMotorcycle(req.params.id);
+        if (!motorcycle) {
+            return res.status(404).json({ message: "Motorcycle not found" });
         }
         res.status(204).send();
     } catch (error) {
