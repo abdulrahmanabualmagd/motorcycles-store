@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const auth = require("../controllers/identity/authController");
-const validator = require("../validators/userValidators");
+const auth = require("./../../controllers/identity/authController");
+const validator = require("./../../validators/userValidators");
 
 // Login
 router.post("/login", validator.userLoginValidationRules(), validator.validateInputs, auth.loginController);
