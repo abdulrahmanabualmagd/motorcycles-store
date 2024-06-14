@@ -5,7 +5,7 @@ const router = require("express").Router();
 const customerController = require("./../../controllers/application/customerController");
 
 // Create
-router.post("/", customerController.createCustomer);
+router.post("/", (req, res, next)=> {console.log("entered"); next();},customerController.createCustomer);
 // GetAll
 router.get("/", customerController.getAllCustomers);
 // GetById

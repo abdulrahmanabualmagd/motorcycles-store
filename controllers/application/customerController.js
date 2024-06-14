@@ -3,10 +3,12 @@
 */
 
 // Import the Customer Service
+const customerService = require("./../../services/application/customerService");
 
 // Customer Crud Operation
 exports.createCustomer = async (req, res) => {
     try {
+
         const customer = await customerService.createCustomer(req.body);
         res.status(201).json(customer);
     } catch (error) {
@@ -37,7 +39,10 @@ exports.getAllCustomers = async (req, res) => {
 
 exports.updateCustomer = async (req, res) => {
     try {
-        const customer = await customerService.updateCustomer(req.params.id, req.body);
+        const customer = await customerService.updateCustomer(
+            req.params.id,
+            req.body
+        );
         if (!customer) {
             return res.status(404).json({ message: "Customer not found" });
         }

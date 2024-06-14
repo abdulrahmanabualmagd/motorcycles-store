@@ -11,8 +11,15 @@ const env = process.env.NODE_ENV || "development";
 const config = require("../../config/identity-config")[env];
 const Repository = require(path.join(__dirname, "../../repository/sequelize/sequelize-repo"));
 
+
+let db = null;
+
 module.exports = async () => {
-    let db = {};
+    
+    // Singleton 
+    if (db) return db
+
+    db = {};
 
     // Sequelize Connection
     let sequelize;

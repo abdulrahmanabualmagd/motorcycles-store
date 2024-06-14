@@ -5,9 +5,16 @@ const path = require("path");
 const basename = path.basename(__filename);
 const Repository = require(path.join(__dirname, "../../repository/mongoose/mongoose-repo.js"));
 
+let db = null;
+
 // Mongoose Connection
 module.exports = async () => {
+    
+    // Singleton 
+    if (db) return db
+
     db = {};
+    
     try {
         await mongoose.connect(process.env.DB_MONGOOSE_URL, { dbName: process.env.DB_APP_NAME });
         console.log("# Mongoose Database Connected! #");

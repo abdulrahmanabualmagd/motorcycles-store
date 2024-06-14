@@ -5,22 +5,13 @@ module.exports = (mongoose) => {
                 type: String,
                 required: true,
                 match: /.+/,
-            },
-            customerId: {
-                type: String,
-                required: true,
-                match: /.+/,
-            },
+            }
         },
         {
             timestamps: true,
             collection: "customers",
-            _id: false,
         }
     );
-
-    //composite unique index
-    customerSchema.index({ userId: 1, customerId: 1 }, { unique: true });
 
     const Customer = mongoose.model("Customer", customerSchema);
     return Customer;

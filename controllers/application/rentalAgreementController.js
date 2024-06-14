@@ -3,6 +3,8 @@
 */
 
 // Import the RentalAgreement Service
+const rentalAgreementService = require("./../../services/application/rentalAgrementService");
+
 
 // RentalAgreement Crud Operation
 exports.createRentalAgreement = async (req, res) => {

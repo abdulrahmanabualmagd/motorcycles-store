@@ -3,6 +3,8 @@
 */
 
 // Import the Receipt Service
+const receiptService = require("./../../services/application/receiptService");
+
 
 // Receipt Crud Operation
 exports.createReceipt = async (req, res) => {
