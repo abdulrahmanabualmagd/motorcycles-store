@@ -23,11 +23,14 @@ app.listen(process.env.PORT, () => {
 });
 
 const { dbApplication } = require("./config/database");
+const { seedingMongoose } = require("./seeders/mongooseApplication/initialApplicationData");
 
 (async () => {
     const db = await dbApplication;
     try {
+        await seedingMongoose();
     } catch (err) {
-        err.message;
+        console.log(err.message);
     }
 })();
+ 
