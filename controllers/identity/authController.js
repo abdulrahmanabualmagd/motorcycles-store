@@ -1,5 +1,5 @@
 const services = require("./../services/authService");
-const { passwordResetMail } = require("../services/mailerService");
+const { passwordResetMail } = require("../../services/mailerService");
 
 exports.loginController = async (req, res, next) => {
     try {

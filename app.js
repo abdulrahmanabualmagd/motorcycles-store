@@ -12,7 +12,6 @@ app.use(express.raw());
 
 // Routes
 app.use("/auth", require("./routers/authRouters"));
-app.use("/home", require("./routers/homeRouters"));
 
 // Handlers
 app.all("*", notFoundHandler);
@@ -21,16 +20,3 @@ app.use(errorHandler);
 app.listen(process.env.PORT, () => {
     console.log(`http://localhost:${process.env.PORT}`);
 });
-
-const { dbApplication } = require("./config/database");
-const { seedingMongoose } = require("./seeders/mongooseApplication/initialApplicationData");
-
-(async () => {
-    const db = await dbApplication;
-    try {
-        await seedingMongoose();
-    } catch (err) {
-        console.log(err.message);
-    }
-})();
- 
