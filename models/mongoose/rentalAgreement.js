@@ -7,15 +7,11 @@ module.exports = (mongoose) => {
             },
             customerId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "customers",
-            },
-            motorcycleId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "motorcycles",
+                ref: "Customer",
             },
             rentalCompanyId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "rentalCompanys",
+                ref: "RentalCompany",
             },
         },
         {

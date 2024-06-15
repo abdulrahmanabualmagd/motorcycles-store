@@ -3,18 +3,17 @@ module.exports = (mongoose) => {
         {
             motorcycleId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "motorcycles",
+                ref: "Motorcycle",
             },
             rentalAgreementId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "rentalAgreements",
+                ref: "RentalAgreement",
             },
         },
         {
             timestamps: true,
             collection: "customers",
             collection: "motorcycles_rentalAgreements",
-            _id: false,
         }
     );
 

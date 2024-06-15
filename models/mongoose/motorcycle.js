@@ -15,11 +15,12 @@ module.exports = (mongoose) => {
             serialNumber: {
                 type: String,
                 unique: true,
-                default: randomStringGenerator(),
+                default: randomStringGenerator,
             },
             receiptId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "receipts",
+                ref: "Receipt",
+                default: null
             },
         },
         {

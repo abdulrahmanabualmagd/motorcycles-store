@@ -7,7 +7,8 @@ module.exports = (mongoose) => {
             },
             customerId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "customers",
+                ref: "Customer",
+                required: true,
             },
         },
         {

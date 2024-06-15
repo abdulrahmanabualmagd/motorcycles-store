@@ -4,8 +4,9 @@ module.exports = (mongoose) => {
             userId: {
                 type: String,
                 required: true,
+                unique: true,
                 match: /.+/,
-            }
+            },
         },
         {
             timestamps: true,
