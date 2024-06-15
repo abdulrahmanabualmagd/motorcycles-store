@@ -19,7 +19,7 @@ exports.createMotorcycle = async (data) => {
 exports.getMotorcycle = async (id) => {
     try {
         const db = await dbApplication;
-        return await db.Motorcycle.repo.getById(id);
+        return await db.Motorcycle.repo.getById(id, {include: ["receipt", "rentalAgreement"]});
     } catch (err) {
         throw err;
     }

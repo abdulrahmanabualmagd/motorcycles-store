@@ -4,6 +4,9 @@ make a formal return for the success of the operation like adding a property res
 receipt total amount will be created afte the user configm the payment so we calculate all motorcycles he wanted and after that we set the total amount 
 to use both sequelize and mongoose with the same service, figure out how to solve the _id with id and change it in the mongoose repo
 validate for the incoming data like this [const { rentalAmount, customerId, rentalCompanyId, motorcycleId } = data;] in service
+attach motorcycles to rentalAgreement and do the same for the receipt
+I made the rentalAgreement but now I'm waiting for the update and other methods
+check for duplicated ids before pushing when associating & delete Ids from array or set null for single values on delete (use splice(value, length) to remove from an array)
 
 
 

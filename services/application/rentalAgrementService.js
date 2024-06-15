@@ -9,37 +9,42 @@ const { dbApplication } = require("./../../config/database");
 exports.createRentalAgreement = async (data) => {
     try {
         // Check for data input
-        const { rentalAmount, customerId, rentalCompanyId, motorcyclesId } =
-            data;
-        if (!rentalAmount || !customerId || !rentalCompanyId || !motorcyclesId)
-            throw Error("Missing Requirements");
+        const { rentalAmount, customer, rentalCompany, motorcycles } = data;
+        if (!rentalAmount || !customer || !rentalCompany || !motorcycles) throw Error("Missing Requirements");
 
         // Get Database Instance
         const db = await dbApplication;
 
-        // Create rentalAgreement
-        const rentalAgreement = await db.RentalAgreement.repo.create({
-            rentalAmount,
-            customerId,
-            rentalCompanyId,
-        });
+        // get the customer
+        const customerResult = await db.Customer.repo.getById(customer);
+        if (!customerResult) throw Error("Motorcyles not found");
 
-        // Create All motorcycles associate it to the rentalAgreement
-        motorcycles_rentalAgreementsData = [];
-        for (let item of motorcyclesId) {
-            motorcycles_rentalAgreementsData.push(
-                new db.MotorcyclesRentalAgreement({
-                    motorcycleId: item,
-                    rentalAgreementId: rentalAgreement._id,
-                })
-            );
+        // get the rentalCompany
+        const rentalCompanyResult = await db.RentalCompany.repo.getById(rentalCompany);
+        if (!rentalCompanyResult) throw Error("RentalCompany not found");
+
+        // get the motorcycles
+        const motorcyclesResult = await db.Motorcycle.repo.getByIds(motorcycles);
+        if (motorcyclesResult.length === 0) throw Error("Motorcyles not found");
+
+        // Create rentalAgreement
+        const rentalAgreementCreateResult = await db.RentalAgreement.repo.create(data);
+
+        // Add renatlAgreement Id to the customer renatAgreements list
+        customerResult.rentalAgreements.push(rentalAgreementCreateResult._id);
+        await customerResult.save();
+
+        // Add rentalAgreement Id to the rentalCompany renatAgreements list
+        rentalCompanyResult.rentalAgreements.push(rentalAgreementCreateResult._id);
+        await rentalCompanyResult.save();
+
+        // Add rentalAgreement Id to all found motorcycles renatAgreement
+        for (let item of motorcyclesResult) {
+            item.rentalAgreement = rentalAgreementCreateResult._id;
+            await item.save();
         }
 
-        // Create motorcycles-rentalAgreements
-        const motorcycles_rentalAgreements =
-            await db.MotorcyclesRentalAgreement.repo.createAll(motorcycles_rentalAgreementsData);
-
-        return { rentalAgreement, rentalAgreement };
+        return { rentalAgreement: rentalAgreementCreateResult };
     } catch (err) {
         throw err;
     }
@@ -51,16 +56,24 @@ exports.getRentalAgreement = async (id) => {
         const db = await dbApplication;
         // get the rentalAgreement first
         const rentalAgreement = await db.RentalAgreement.repo.getById(id, {
-            include: ["customerId", "rentalCompanyId"],
+            include: ["customer", "rentalCompany", "motorcycles"],
         });
+
         // Check that rentalAgreement exists
         if (!rentalAgreement) throw Error("RentalAgreement not found");
         // Get All motorCycles with specidified rentalAgreementId
-        const motorcycles = await db.MotorcyclesRentalAgreement.repo.getOne({
+        const motorcyclesId = await db.MotorcyclesRentalAgreement.repo.getAll({
             where: { rentalAgreementId: rentalAgreement._id },
-            include: ["motorcyclesId"],
+            include: [["customer", "rentalCompany", "motorcycles"]],
         });
-        // Get all motorcycles, make sure that the receipt have more than one motorccle
+
+        const motorcycles = motorcyclesId.map((item) => item.motorcycleId);
+
+        // Attach motorcycles to rental agreement document
+        // _doc => contains the actual data for the document retrievced from the database
+        rentalAgreement._doc.motorcycles = motorcycles;
+
+        return rentalAgreement._doc;
     } catch (err) {
         throw err;
     }
@@ -70,7 +83,7 @@ exports.getRentalAgreement = async (id) => {
 exports.getAllRentalAgreements = async () => {
     try {
         const db = await dbApplication;
-        return await db.RentalAgreement.repo.getAll();
+        return await db.RentalAgreement.repo.getAll({ include: ["customer", "rentalCompany", "motorcycles"] });
     } catch (err) {
         throw err;
     }

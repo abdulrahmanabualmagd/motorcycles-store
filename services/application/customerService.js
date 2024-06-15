@@ -19,7 +19,7 @@ exports.createCustomer = async (data) => {
 exports.getCustomer = async (id) => {
     try {
         const db = await dbApplication;
-        return await db.Customer.repo.getById(id);
+        return await db.Customer.repo.getById(id, { include: ["receipts", "rentalAgreements"] });
     } catch (err) {
         throw err;
     }
@@ -29,7 +29,7 @@ exports.getCustomer = async (id) => {
 exports.getAllCustomers = async () => {
     try {
         const db = await dbApplication;
-        return await db.Customer.repo.getAll();
+        return await db.Customer.repo.getAll({ include: ["receipts", "rentalAgreements"] });
     } catch (err) {
         throw err;
     }
@@ -49,7 +49,7 @@ exports.updateCustomer = async (id, data) => {
 exports.deleteCustomer = async (id) => {
     try {
         const db = await dbApplication;
-        return await db.Customer.repo.delete({where: {id : id}});
+        return await db.Customer.repo.delete({ where: { id: id } });
     } catch (err) {
         throw err;
     }
