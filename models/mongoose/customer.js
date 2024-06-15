@@ -7,6 +7,14 @@ module.exports = (mongoose) => {
                 unique: true,
                 match: /.+/,
             },
+            receipts: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Receipt",
+            }],
+            rentalAgreements: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "RentalAgreement",
+            }],
         },
         {
             timestamps: true,

@@ -5,11 +5,17 @@ module.exports = (mongoose) => {
                 type: Number,
                 required: true,
             },
-            customerId: {
+            customer: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Customer",
-                required: true,
+                default: null,
             },
+            motorcycles: [
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Motorcycle",
+                },
+            ],
         },
         {
             timestamps: true,

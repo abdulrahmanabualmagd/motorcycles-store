@@ -5,14 +5,22 @@ module.exports = (mongoose) => {
                 type: Number,
                 required: true,
             },
-            customerId: {
+            customer: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Customer",
+                default: null,
             },
-            rentalCompanyId: {
+            rentalCompany: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "RentalCompany",
+                default: null,
             },
+            motorcycles: [
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Motorcycle",
+                },
+            ],
         },
         {
             timestamps: true,
@@ -20,9 +28,6 @@ module.exports = (mongoose) => {
         }
     );
 
-    const RentalAgreement = mongoose.model(
-        "RentalAgreement",
-        rentalAgreementSchema
-    );
+    const RentalAgreement = mongoose.model("RentalAgreement", rentalAgreementSchema);
     return RentalAgreement;
 };

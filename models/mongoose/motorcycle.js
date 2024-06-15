@@ -17,10 +17,15 @@ module.exports = (mongoose) => {
                 unique: true,
                 default: randomStringGenerator,
             },
-            receiptId: {
+            receipt: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Receipt",
-                default: null
+                default: null,
+            },
+            rentalAgreement: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "RentalAgreement",
+                default: null,
             },
         },
         {

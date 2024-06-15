@@ -6,6 +6,10 @@ module.exports = (mongoose) => {
                 required: true,
                 match: /.+/,
             },
+            rentalAgreements: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "RentalAgreement",
+            }],
         },
         {
             timestamps: true,
