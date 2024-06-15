@@ -5,7 +5,7 @@ const router = require("express").Router();
 const rentalCompanyController = require("./../../controllers/application/rentalCompanyController");
 
 // Create
-router.post("/", rentalCompanyController.createRentalCompany);
+router.post("/",rentalCompanyController.createRentalCompany);
 // GetAll
 router.get("/", rentalCompanyController.getAllRentalCompanys);
 // GetById
