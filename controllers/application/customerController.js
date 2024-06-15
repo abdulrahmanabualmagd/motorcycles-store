@@ -8,7 +8,6 @@ const customerService = require("./../../services/application/customerService");
 // Customer Crud Operation
 exports.createCustomer = async (req, res) => {
     try {
-
         const customer = await customerService.createCustomer(req.body);
         res.status(201).json(customer);
     } catch (error) {
@@ -58,7 +57,7 @@ exports.deleteCustomer = async (req, res) => {
         if (!customer) {
             return res.status(404).json({ message: "Customer not found" });
         }
-        res.status(204).send();
+        res.status(204).json(customer);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -55,7 +55,7 @@ exports.deleteRentalCompany = async (req, res) => {
         if (!rentalCompany) {
             return res.status(404).json({ message: "RentalCompany not found" });
         }
-        res.status(204).send();
+        res.status(204).json(rentalCompany);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

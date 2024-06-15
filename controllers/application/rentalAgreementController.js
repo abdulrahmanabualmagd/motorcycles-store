@@ -55,7 +55,7 @@ exports.deleteRentalAgreement = async (req, res) => {
         if (!rentalAgreement) {
             return res.status(404).json({ message: "RentalAgreement not found" });
         }
-        res.status(204).send();
+        res.status(204).json(rentalAgreement);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

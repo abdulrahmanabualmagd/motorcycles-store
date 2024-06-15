@@ -1,3 +1,13 @@
+customer userId not unique fix it 
+test the db instance, make sure it is singleton use console.log inside the if condition that checks for db not null
+make a formal return for the success of the operation like adding a property result:true 
+receipt total amount will be created afte the user configm the payment so we calculate all motorcycles he wanted and after that we set the total amount 
+to use both sequelize and mongoose with the same service, figure out how to solve the _id with id and change it in the mongoose repo
+validate for the incoming data like this [const { rentalAmount, customerId, rentalCompanyId, motorcycleId } = data;] in service
+
+
+
+
 1- Install all packages using node package manger 
    $ npm i
 

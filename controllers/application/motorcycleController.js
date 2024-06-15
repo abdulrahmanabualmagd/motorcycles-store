@@ -54,7 +54,8 @@ exports.deleteMotorcycle = async (req, res) => {
         if (!motorcycle) {
             return res.status(404).json({ message: "Motorcycle not found" });
         }
-        res.status(204).send();
+        console.log("motorcycle deleted: " + motorcycle)
+        res.status(204).json(motorcycle);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
