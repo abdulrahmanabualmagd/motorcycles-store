@@ -1,24 +1,17 @@
 const { body, validationResult } = require("express-validator");
 
 exports.userRegisterValidationRules = () => [
-    body("username").notEmpty().withMessage("Username is required"),
     body("email").isEmail().withMessage("Email is invalid"),
-    body("password").notEmpty().withMessage("Password is required").isStrongPassword().withMessage("Weak Password!"),
-    body("firstName")
+    body("fullName")
         .notEmpty()
         .withMessage("First name is required")
-        .isLength({ min: 3, max: 15 })
+        .isLength({ min: 3 })
         .withMessage("First name must be between 3 and 15 characters"),
-    body("lastName")
-        .notEmpty()
-        .withMessage("Last name is required")
-        .isLength({ min: 3, max: 15 })
-        .withMessage("Last name must be between 3 and 15 characters"),
     body("phone")
         .optional()
         .matches(/^[0-9]+$/)
         .withMessage("Phone number must contain only numbers"),
-    body("address").optional(),
+    body("nationalId").notEmpty().withMessage("nationalId is required").isLength({ min: 10, max: 10 }),
 ];
 
 exports.userLoginValidationRules = () => [
@@ -38,7 +31,7 @@ exports.validateInputs = (req, res, next) => {
     if (errors.isEmpty()) {
         return next();
     }
-    
+
     const recordedErrors = errors.array().map((err) => ({
         param: err.param,
         msg: err.msg,
