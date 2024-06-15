@@ -58,6 +58,18 @@ module.exports = (sequelize, DataTypes, uuidv4) => {
                     notEmpty: true,
                 },
             },
+            verificationCode: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            stage: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                defaultValue: "1",
+                validate: {
+                    isIn: [["1", "2", "completed"]],
+                },
+            },
             passwordHash: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -67,7 +79,7 @@ module.exports = (sequelize, DataTypes, uuidv4) => {
             },
             fullName: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 validate: {
                     notEmpty: true,
                 },
@@ -75,13 +87,14 @@ module.exports = (sequelize, DataTypes, uuidv4) => {
             phone: {
                 type: DataTypes.STRING,
                 allowNull: true,
+                unique: true,
                 validate: {
                     is: /^[0-9]+$/i,
                 },
             },
             nationalId: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 unique: true,
                 validate: {
                     notEmpty: true,
@@ -98,7 +111,6 @@ module.exports = (sequelize, DataTypes, uuidv4) => {
             salt: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                defaultValue: "",
             },
         },
         {
