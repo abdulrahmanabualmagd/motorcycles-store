@@ -3,34 +3,54 @@
 */
 
 // Import the Database
+const { dbApplication } = require("./../../config/database");
 
-// RentalCompany Crud Operation
+// Add RentalCompany
 exports.createRentalCompany = async (data) => {
-
-    // Use mongoose methods to create new rentalCompany (create or new instanst & save)
-
+    try {
+        const db = await dbApplication;
+        return await db.RentalCompany.repo.create(data);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Get By Id
 exports.getRentalCompany = async (id) => {
-
-    // Use mongoose methods to get rentalCompany by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.RentalCompany.repo.getById(id);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Get All
 exports.getAllRentalCompanys = async () => {
-
-    // Use mongoose methods to get rentalCompany by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.RentalCompany.repo.getAll();
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Update RentalCompany
 exports.updateRentalCompany = async (id, data) => {
-
-    // Use mongoose methods to update rentalCompany 
-
+    try {
+        const db = await dbApplication;
+        return await db.RentalCompany.repo.update(id, data);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Delete RentalCompany
 exports.deleteRentalCompany = async (id) => {
-
-    // Use mongoose methods to delete rentalCompany by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.RentalCompany.repo.delete({where: {id : id}});
+    } catch (err) {
+        throw err;
+    }
 };

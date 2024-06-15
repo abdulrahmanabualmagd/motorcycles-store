@@ -3,34 +3,95 @@
 */
 
 // Import the Database
+const { dbApplication } = require("./../../config/database");
 
-// RentalAgreement Crud Operation
+// Add RentalAgreement
 exports.createRentalAgreement = async (data) => {
+    try {
+        // Check for data input
+        const { rentalAmount, customerId, rentalCompanyId, motorcyclesId } =
+            data;
+        if (!rentalAmount || !customerId || !rentalCompanyId || !motorcyclesId)
+            throw Error("Missing Requirements");
 
-    // Use mongoose methods to create new rentalAgreement (create or new instanst & save)
+        // Get Database Instance
+        const db = await dbApplication;
 
+        // Create rentalAgreement
+        const rentalAgreement = await db.RentalAgreement.repo.create({
+            rentalAmount,
+            customerId,
+            rentalCompanyId,
+        });
+
+        // Create All motorcycles associate it to the rentalAgreement
+        motorcycles_rentalAgreementsData = [];
+        for (let item of motorcyclesId) {
+            motorcycles_rentalAgreementsData.push(
+                new db.MotorcyclesRentalAgreement({
+                    motorcycleId: item,
+                    rentalAgreementId: rentalAgreement._id,
+                })
+            );
+        }
+
+        // Create motorcycles-rentalAgreements
+        const motorcycles_rentalAgreements =
+            await db.MotorcyclesRentalAgreement.repo.createAll(motorcycles_rentalAgreementsData);
+
+        return { rentalAgreement, rentalAgreement };
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Get By Id
 exports.getRentalAgreement = async (id) => {
-
-    // Use mongoose methods to get rentalAgreement by its Id 
-
+    try {
+        const db = await dbApplication;
+        // get the rentalAgreement first
+        const rentalAgreement = await db.RentalAgreement.repo.getById(id, {
+            include: ["customerId", "rentalCompanyId"],
+        });
+        // Check that rentalAgreement exists
+        if (!rentalAgreement) throw Error("RentalAgreement not found");
+        // Get All motorCycles with specidified rentalAgreementId
+        const motorcycles = await db.MotorcyclesRentalAgreement.repo.getOne({
+            where: { rentalAgreementId: rentalAgreement._id },
+            include: ["motorcyclesId"],
+        });
+        // Get all motorcycles, make sure that the receipt have more than one motorccle
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Get All
 exports.getAllRentalAgreements = async () => {
-
-    // Use mongoose methods to get rentalAgreement by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.RentalAgreement.repo.getAll();
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Update RentalAgreement
 exports.updateRentalAgreement = async (id, data) => {
-
-    // Use mongoose methods to update rentalAgreement 
-
+    try {
+        const db = await dbApplication;
+        return await db.RentalAgreement.repo.update(id, data);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Delete RentalAgreement
 exports.deleteRentalAgreement = async (id) => {
-
-    // Use mongoose methods to delete rentalAgreement by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.RentalAgreement.repo.delete({ where: { id: id } });
+    } catch (err) {
+        throw err;
+    }
 };

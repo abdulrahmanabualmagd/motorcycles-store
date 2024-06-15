@@ -5,29 +5,52 @@
 // Import the Database
 const { dbApplication } = require("./../../config/database");
 
-// Customer Crud Operation
+// Add Customer
 exports.createCustomer = async (data) => {
     try {
-        
         const db = await dbApplication;
-        await db.Customer.repo.create(data);
+        return await db.Customer.repo.create(data);
     } catch (err) {
         throw err;
     }
 };
 
+// Get By Id
 exports.getCustomer = async (id) => {
-    // Use mongoose methods to get customer by its Id
+    try {
+        const db = await dbApplication;
+        return await db.Customer.repo.getById(id);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Get All
 exports.getAllCustomers = async () => {
-    // Use mongoose methods to get customer by its Id
+    try {
+        const db = await dbApplication;
+        return await db.Customer.repo.getAll();
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Update Customer
 exports.updateCustomer = async (id, data) => {
-    // Use mongoose methods to update customer
+    try {
+        const db = await dbApplication;
+        return await db.Customer.repo.update(id, data);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Delete Customer
 exports.deleteCustomer = async (id) => {
-    // Use mongoose methods to delete customer by its Id
+    try {
+        const db = await dbApplication;
+        return await db.Customer.repo.delete({where: {id : id}});
+    } catch (err) {
+        throw err;
+    }
 };

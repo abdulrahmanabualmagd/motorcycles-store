@@ -3,34 +3,54 @@
 */
 
 // Import the Database
+const { dbApplication } = require("./../../config/database");
 
-// Motorcycle Crud Operation
+// Add Motorcycle
 exports.createMotorcycle = async (data) => {
-
-    // Use mongoose methods to create new motorcycle (create or new instanst & save)
-
+    try {
+        const db = await dbApplication;
+        return await db.Motorcycle.repo.create(data);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Get By Id
 exports.getMotorcycle = async (id) => {
-
-    // Use mongoose methods to get motorcycle by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.Motorcycle.repo.getById(id);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Get All
 exports.getAllMotorcycles = async () => {
-
-    // Use mongoose methods to get motorcycle by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.Motorcycle.repo.getAll();
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Update Motorcycle
 exports.updateMotorcycle = async (id, data) => {
-
-    // Use mongoose methods to update motorcycle 
-
+    try {
+        const db = await dbApplication;
+        return await db.Motorcycle.repo.update(id, data);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Delete Motorcycle
 exports.deleteMotorcycle = async (id) => {
-
-    // Use mongoose methods to delete motorcycle by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.Motorcycle.repo.delete({ where: { id: id } });
+    } catch (err) {
+        throw err;
+    }
 };

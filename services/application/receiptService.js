@@ -3,34 +3,54 @@
 */
 
 // Import the Database
+const { dbApplication } = require("./../../config/database");
 
-// Receipt Crud Operation
+// Add Receipt
 exports.createReceipt = async (data) => {
-
-    // Use mongoose methods to create new receipt (create or new instanst & save)
-
+    try {
+        const db = await dbApplication;
+        return await db.Receipt.repo.create(data);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Get By Id
 exports.getReceipt = async (id) => {
-
-    // Use mongoose methods to get receipt by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.Receipt.repo.getById(id);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Get All
 exports.getAllReceipts = async () => {
-
-    // Use mongoose methods to get receipt by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.Receipt.repo.getAll();
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Update Receipt
 exports.updateReceipt = async (id, data) => {
-
-    // Use mongoose methods to update receipt 
-
+    try {
+        const db = await dbApplication;
+        return await db.Receipt.repo.update(id, data);
+    } catch (err) {
+        throw err;
+    }
 };
 
+// Delete Receipt
 exports.deleteReceipt = async (id) => {
-
-    // Use mongoose methods to delete receipt by its Id 
-
+    try {
+        const db = await dbApplication;
+        return await db.Receipt.repo.delete({where: {id : id}});
+    } catch (err) {
+        throw err;
+    }
 };
