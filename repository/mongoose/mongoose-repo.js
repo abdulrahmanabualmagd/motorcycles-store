@@ -115,9 +115,9 @@ class Repository {
 
     // --------------------------------------- [ Update ] ---------------------------------------
     // Update
-    async update(data, options = {}) {
+    async update(_id, data, options = {}) {
         try {
-            return await this.model.findByIdAndUpdate(data._id, data, { new: true, ...options });
+            return await this.model.findByIdAndUpdate(_id , data, { new: true, ...options });
         } catch (err) {
             throw err;
         }
@@ -127,7 +127,7 @@ class Repository {
     // Delete
     async delete(options) {
         try {
-            const deletedDocument = await this.model.deleteOne(options.where);
+            const deletedDocument = await this.model.deleteOne({_id: options.where.id});
             return deletedDocument.deletedCount > 0 ? deletedDocument : null;
         } catch (err) {
             throw err;
@@ -189,6 +189,7 @@ class Repository {
     }
 
     // --------------------------------------- [ Associations ] ---------------------------------------
+    // we insert data manually using junction model
     async addAssociations(source, targetArray) {
         source[targetArray.field].push(...targetArray.values);
         return source.save();
