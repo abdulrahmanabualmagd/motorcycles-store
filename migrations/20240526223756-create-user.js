@@ -21,6 +21,18 @@ module.exports = {
                     notEmpty: true,
                 },
             },
+            verificationCode: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            stage: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                defaultValue: "1",
+                validate: {
+                    isIn: [["1", "2", "completed"]],
+                },
+            },
             passwordHash: {
                 type: Sequelize.STRING,
                 allowNull: false,
@@ -30,7 +42,6 @@ module.exports = {
             },
             fullName: {
                 type: Sequelize.STRING,
-                allowNull: false,
                 validate: {
                     notEmpty: true,
                     min: 3,
@@ -40,6 +51,7 @@ module.exports = {
             phone: {
                 type: Sequelize.STRING,
                 allowNull: true,
+                unique: true,
                 validate: {
                     is: /^[0-9]+$/i,
                 },
@@ -55,7 +67,7 @@ module.exports = {
             status: {
                 type: Sequelize.STRING,
                 allowNull: false,
-                defaultValue: "active",
+                defaultValue: "inactive",
                 validate: {
                     isIn: [["active", "inactive", "suspend"]],
                 },
@@ -63,7 +75,6 @@ module.exports = {
             salt: {
                 type: Sequelize.STRING,
                 allowNull: false,
-                defaultValue: "",
             },
             createdAt: {
                 allowNull: false,
