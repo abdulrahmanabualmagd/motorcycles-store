@@ -28,7 +28,7 @@ class Repository {
     // Select All
     async getAll(options = { include: null, where: {} }) {
         try {
-            return await this.model.find(options.where).populate(options.include);
+            return await this.model.find(options.where).populate(options.include).exec();
         } catch (err) {
             throw err;
         }
@@ -37,7 +37,19 @@ class Repository {
     // findById
     async getById(id, options = { include: null }) {
         try {
-            return await this.model.findById(id).populate(options.include);
+            return await this.model.findById(id).populate(options.include).exec();
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // findByIds
+    async getByIds(ids, options = { include: null }) {
+        try {
+            return await this.model
+                .find({ _id: { $in: ids } })
+                .populate(options.include)
+                .exec();
         } catch (err) {
             throw err;
         }
@@ -46,7 +58,7 @@ class Repository {
     // findOne
     async getOne(options = { include: null, where: {} }) {
         try {
-            return await this.model.findOne(options.where).populate(options.include);
+            return await this.model.findOne(options.where).populate(options.include).exec();
         } catch (err) {
             throw err;
         }
@@ -55,7 +67,7 @@ class Repository {
     // Find or create
     async getOrCreate(data, options = { include: null, where: {} }) {
         try {
-            let document = await this.model.findOne(options.where).populate(options.include);
+            let document = await this.model.findOne(options.where).populate(options.include).exec();
             if (!document) {
                 document = new this.model(data);
                 await document.save();
@@ -70,7 +82,7 @@ class Repository {
     // Find and Count All
     async getAndCountAll(options = { include: null, where: {} }) {
         try {
-            const results = await this.model.find(options.where).populate(options.include);
+            const results = await this.model.find(options.where).populate(options.include).exec();
             const count = await this.model.countDocuments(options.where);
             return { count, rows: results };
         } catch (err) {
@@ -117,7 +129,7 @@ class Repository {
     // Update
     async update(_id, data, options = {}) {
         try {
-            return await this.model.findByIdAndUpdate(_id , data, { new: true, ...options });
+            return await this.model.findByIdAndUpdate(_id, data, { new: true, ...options });
         } catch (err) {
             throw err;
         }
@@ -127,7 +139,7 @@ class Repository {
     // Delete
     async delete(options) {
         try {
-            const deletedDocument = await this.model.deleteOne({_id: options.where.id});
+            const deletedDocument = await this.model.deleteOne({ _id: options.where.id });
             return deletedDocument.deletedCount > 0 ? deletedDocument : null;
         } catch (err) {
             throw err;
