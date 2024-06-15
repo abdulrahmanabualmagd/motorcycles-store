@@ -1,20 +1,24 @@
 const { dbIdentity } = require("./../../config/database");
 const { hashPassword, verifyPassword } = require("./../../utils/passwordUtils");
 const { createToken } = require("./../../utils/tokenUtils");
-const { passwordResetToken, checkRecentToken, checkExpiration } = require("./../../utils/passwordResetUtils");
+const emailTokensUtils = require("./../../utils/emailTokensUtils");
+const { createCustomer } = require("./../application/customerService");
 
 // ------------------------------- [ Register ] -------------------------------
-exports.registerService = async (req, res, next) => {
-    // Init Database
-    const db = await dbIdentity; // Because all indexes are returning a promise (all are async)
-
-    // Collect Data
-    const { username, email, password, firstName, lastName, phone, address } = req.body;
-
-    // Check Data
-    if (!username || !email || !password || !firstName || !lastName) throw new Error("Missing Required Fields");
-
+/*
+    # step 1    (email, password, salt, verificationCode)
+        - check for email ducplication
+        - hash password and get the hashed password and result 
+        - generate verification token 
+        - create user and add check the role before going to further (not save user before the check)
+        - create the user and associate with user role (default)
+*/
+exports.emailVerificationGetTokenService = async (email, password) => {
     try {
+        const db = await dbIdentity;
+
+        // save user (email, password, salt, status(inactive)) add role and so on
+
         // Check email duplication
         const emailduplicationResult = await db.User.repo.getOne({ where: { email: email } });
         if (emailduplicationResult) throw new Error("Dublicated Email");
@@ -22,17 +26,15 @@ exports.registerService = async (req, res, next) => {
         // Hash Password
         const { hashedPassword, salt } = await hashPassword(password);
 
+        // create the emailverification token
+        const emailVerificationToken = emailTokensUtils.passwordResetToken();
+
         // Create User
         const userData = {
-            username: username,
             email: email,
             passwordHash: hashedPassword,
-            firstName: firstName,
-            lastName: lastName,
-            phone: phone || null,
-            address: address || null,
-            status: "active",
             salt,
+            verificationCode: emailVerificationToken,
         };
 
         // Check for roles before saving the user in the database
@@ -41,6 +43,7 @@ exports.registerService = async (req, res, next) => {
                 name: "user",
             },
         });
+
         if (!role) throw Error("No roles found!");
 
         // Insert User to Database
@@ -49,25 +52,95 @@ exports.registerService = async (req, res, next) => {
         // Add Role to User
         await db.User.repo.addAssociations(user, role, "Role");
 
-        // Return User
-        return user;
+        // Return results
+        return { user, emailVerificationToken };
+    } catch (err) {
+        throw err;
+    }
+};
+
+/*
+    # step 2 
+        - update status to (active) account + update the phase to (2)
+*/
+exports.emailVerificationVerifyTokenService = async (token) => {
+    try {
+        const db = await dbIdentity;
+        const user = await db.User.repo.getOne({
+            where: {
+                verificationCode: token,
+            },
+        });
+
+        // check the user
+        if (!user) throw Error("User not found");
+
+        // check if the user is already activated his account
+        if (user.status === "active" || user.status === "suspend") throw Error("User Account is Already Activated");
+
+        // check the verifcation code
+        if (user.verificationCode !== token) throw Error("Invalid Token");
+
+        // activate account
+        user.status = "active";
+        // update stage
+        user.stage = "2";
+        user.save();
+
+        return { message: "Account Activated Successfully!", user };
+    } catch (err) {
+        throw err;
+    }
+};
+
+/*
+    # step 3 
+        - complete the registration and add the phone, nationalId and full name (validation on the application level for these fields)
+*/
+exports.registerService = async (data) => {
+    // Init Database
+    const db = await dbIdentity; // Because all indexes are returning a promise (all are async)
+
+    const { email, nationalId, phone, fullName } = data;
+
+    try {
+        // Check email duplication
+        const user = await db.User.repo.getOne({ where: { email } });
+        if (!user) throw new Error("User not found");
+
+        // Make sure that user account is activated
+        if (user.status !== "active") throw Error("You must activate your account First");
+
+        user.nationalId = nationalId;
+        user.phone = phone;
+        user.fullName = fullName;
+
+        await user.save();
+
+        // Create customer in the application database
+        const customer = await createCustomer({
+            userId: user.id,
+        });
+
+        // Return User & Customer
+        return { user, customer };
     } catch (err) {
         throw err;
     }
 };
 
 // ------------------------------- [ Login ] -------------------------------
-exports.loginService = async (req, res, next) => {
-    // Init Database
-    const db = await dbIdentity; // Because all indexes are returning a promise (all are async)
-
-    // Collect Data
-    const { email, password } = req.body;
-
-    // Check Data
-    if (!email || !password) throw new Error("Missing required fields");
-
+/*
+    The user Account must be activated to be able to login 
+*/
+exports.loginService = async (data) => {
     try {
+        // Init Database
+        const db = await dbIdentity; // Because all indexes are returning a promise (all are async)
+
+        // Collect Data
+        const { email, password } = data;
+
         // Get User by Email
         const user = await db.User.repo.getOne({
             where: { email: email },
@@ -79,6 +152,14 @@ exports.loginService = async (req, res, next) => {
             ],
         });
         if (!user) throw new Error("User Not Found");
+
+        // check the user status first (must be activa account to be able to log in)
+        switch (user.status) {
+            case "inactive":
+                throw Error("Please Activate Your Account");
+            case "suspend":
+                throw Error("Your Account Suspended");
+        }
 
         // Hash Password
         if (!(await verifyPassword(password, user.salt, user.passwordHash))) throw new Error("Wrong Password");
@@ -93,10 +174,10 @@ exports.loginService = async (req, res, next) => {
 
         // Prepare Payload
         const payload = {
-            username: user.username,
+            fullName: user.fullName,
             email: user.email,
             phone: user.phone,
-            address: user.address,
+            nationalId: user.nationalId,
             roles: roles,
         };
 
@@ -111,15 +192,15 @@ exports.loginService = async (req, res, next) => {
 
 // ------------------------------- [ Rest Password (Generate) ] -------------------------------
 exports.resetPasswordGetTokenService = async (req, res, next) => {
-    // Init Database
-    const db = await dbIdentity; // Because all indexes are returning a promise (all are async)
-
-    // Collect Data
-    const { email } = req.body;
-
-    if (!email) throw new Error("Missing required Field");
-
     try {
+        // Init Database
+        const db = await dbIdentity; // Because all indexes are returning a promise (all are async)
+
+        // Collect Data
+        const { email } = req.body;
+
+        if (!email) throw new Error("Missing required Field");
+
         // Get user
         const user = await db.User.repo.getOne({ where: { email: email } });
 
@@ -137,14 +218,14 @@ exports.resetPasswordGetTokenService = async (req, res, next) => {
         // Check reset token
         if (userRecentPasswordResetToken) {
             // Check availability to create another one if it has passed the specified time
-            const result = checkRecentToken(userRecentPasswordResetToken.createdAt);
+            const result = emailTokensUtils.checkRecentToken(userRecentPasswordResetToken.createdAt);
             if (result > 0)
                 throw new Error(`You have to wait ${result / (60 * 1000)} minutes before Generating another token`);
         }
 
         // Create String Token object
         const passwordResetTokenObject = {
-            token: passwordResetToken(), // Default Bytes[64]
+            token: emailTokensUtils.passwordResetToken(), // Default Bytes[64]
             userId: user.id,
             expiresAt: new Date(Date.now() + 1000 * 60 * process.env.RESET_PASSWORD_EXPIRATION),
         };
@@ -160,49 +241,48 @@ exports.resetPasswordGetTokenService = async (req, res, next) => {
 
 // ------------------------------- [ Rest Password (Verify) ] -------------------------------
 exports.resetPasswordVerifyTokenService = async (req, res, next) => {
-    // Init Database
-    const db = await dbIdentity; // Because all indexes are returning a promise (all are async)
-
-    // Collect Data
-    const { token } = req.params;
-    const { password } = req.body;
-
-    // Check Data
-    if (!token || !password) throw new Error("Token or Password not found");
-
-    // Get Token
-    const userToken = await db.PasswordResetToken.repo.getOne({
-        where: { token: token },
-        order: [["createdAt", "DESC"]],
-        include: {
-            model: db.User,
-            as: "User",
-        },
-    });
-
-    // Check Existance Token
-    if (!userToken) throw new Error("Token Not Found");
-
-    // Check Token Expiration
-    if (checkExpiration(userToken.expiresAt)) throw new Error("Token Expired");
-
-    // Hash Password
-    const { hashedPassword, salt } = await hashPassword(password);
-
-    // Update User Password, Salt, UpdatedAt
-    userToken.User.passwordHash = hashedPassword;
-    userToken.User.salt = salt;
-    userToken.User.updatedAt = Date.now();
-
-    // Save Updated Valued for User
-    await userToken.User.save();
-
-    // Destroy Used Token
-    userToken.destroy();
-
-    return "Password Updated Successfully!";
-
     try {
+        // Init Database
+        const db = await dbIdentity; // Because all indexes are returning a promise (all are async)
+
+        // Collect Data
+        const { token } = req.params;
+        const { password } = req.body;
+
+        // Check Data
+        if (!token || !password) throw new Error("Token or Password not found");
+
+        // Get Token
+        const userToken = await db.PasswordResetToken.repo.getOne({
+            where: { token: token },
+            order: [["createdAt", "DESC"]],
+            include: {
+                model: db.User,
+                as: "User",
+            },
+        });
+
+        // Check Existance Token
+        if (!userToken) throw new Error("Token Not Found");
+
+        // Check Token Expiration
+        if (emailTokensUtils.checkExpiration(userToken.expiresAt)) throw new Error("Token Expired");
+
+        // Hash Password
+        const { hashedPassword, salt } = await hashPassword(password);
+
+        // Update User Password, Salt, UpdatedAt
+        userToken.User.passwordHash = hashedPassword;
+        userToken.User.salt = salt;
+        userToken.User.updatedAt = Date.now();
+
+        // Save Updated Valued for User
+        await userToken.User.save();
+
+        // Destroy Used Token
+        userToken.destroy();
+
+        return "Password Updated Successfully!";
     } catch (err) {
         throw err;
     }
