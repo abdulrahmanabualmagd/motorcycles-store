@@ -8,6 +8,7 @@ attach motorcycles to rentalAgreement and do the same for the receipt
 I made the rentalAgreement but now I'm waiting for the update and other methods
 check for duplicated ids before pushing when associating & delete Ids from array or set null for single values on delete (use splice(value, length) to remove from an array)
 
+try to use both (module.exports & export default ) one used for multiple value with specified NAMES, and the other used for only a single value but flexible name
 
 
 
