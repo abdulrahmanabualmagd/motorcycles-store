@@ -27,3 +27,5 @@ try to use both (module.exports & export default ) one used for multiple value w
    $ npx sequelize-cli db:seed:all --seeders-path seeders/sequelizeIdentity --config=config/identity-config.js
 
    
+
+java
