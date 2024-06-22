@@ -1,0 +1,49 @@
+use axiox for handling http request
+
+// Creation ------------------------------------
+// Create an Axios instance
+const apiClient = axios.create({
+  baseURL: 'https://api.example.com', // Replace with your API base URL
+  timeout: 1000,
+  headers: { 'Content-Type': 'application/json' },
+});
+
+// Function to handle GET requests
+export const get = async (endpoint, params = {}) => {
+  try {
+    const response = await apiClient.get(endpoint, { params });
+    return response.data;
+  } catch (error) {
+    console.error('API GET request error: ', error);
+    throw error;
+  }
+};
+
+// Function to handle POST requests
+export const post = async (endpoint, data) => {
+  try {
+    const response = await apiClient.post(endpoint, data);
+    return response.data;
+  } catch (error) {
+    console.error('API POST request error: ', error);
+    throw error;
+  }
+};
+
+// Additional functions for PUT, DELETE, etc. can be added similarly
+
+Usage -----------------------------------------------
+
+import { get, post } from './api';
+
+// Function to fetch user data
+export const fetchUserData = async (userId) => {
+  return await get(`/users/${userId}`);
+};
+
+// Function to create a new user
+export const createUser = async (userData) => {
+  return await post('/users', userData);
+};
+
+// Additional functions for updating and deleting users can be added here
