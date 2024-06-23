@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoute from "./components/privateRoute";
 
-import AdminPanelPage from "./pages/adminPanelPage";
-import UserPanelPage from "./pages/userPanelPage";
-import LoginPage from "./pages/loginPage";
-import RegisterPage from "./pages/registerPage";
-import LandingPage from "./pages/landingPage";
-import NotFoundPage from "./pages/notFoundPage";
+import AdminPanelPage from "./pages/adminPanelPager/adminPanelPage";
+import UserPanelPage from "./pages/userPanelPage/userPanelPage";
+import LoginPage from "./pages/loginPage/loginPage";
+import RegisterPage from "./pages/registerPage/registerPage";
+import LandingPage from "./pages/landingPage/landingPage";
+import NotFoundPage from "./pages/notFoundPage/notFoundPage";
 
 export const router = createBrowserRouter([
     {

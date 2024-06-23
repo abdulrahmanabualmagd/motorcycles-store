@@ -1,7 +1,11 @@
-export default function HeaderComponent(){
+import { AppBar, Toolbar, Typography } from "@mui/material";
+
+export default function HeaderComponent() {
     return (
-        <div className="container m-5">
-            Header  
-        </div>
-    )
+        <AppBar position="static">
+            <Toolbar>
+                <Typography variant="h6">My App</Typography>
+            </Toolbar>
+        </AppBar>
+    );
 }

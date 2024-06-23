@@ -6,7 +6,7 @@
 
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
-import LoginPage from "../pages/loginPage";
+import LoginPage from "../pages/loginPage/loginPage";
 
 export default function PrivateRoute({ children }) {
     // Get authToken

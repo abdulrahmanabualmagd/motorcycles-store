@@ -1,4 +1,3 @@
 don't forget to handle the user login/register when he is already authenticated
-
-Styling packages
-npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
+Styling packages $ npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
+Header and Footer in the routes
