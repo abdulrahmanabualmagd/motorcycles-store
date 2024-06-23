@@ -1,14 +1,11 @@
 import AuthProvider from "./context/authContext";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
-import { Box, createTheme, CssBaseline, Grid, ThemeProvider } from "@mui/material";
+import { CssBaseline, Grid, ThemeProvider } from "@mui/material";
 import HeaderComponent from "./components/header/headerComponent";
 import FooterComponent from "./components/footer/footerComponent";
+import { theme } from "./theme";
 export default function App() {
-    const theme = createTheme({
-        /* Custom Theme Goes Here */
-    });
-
     return (
         <>
             <ThemeProvider theme={theme}>
