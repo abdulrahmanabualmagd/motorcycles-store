@@ -10,14 +10,14 @@ export const theme = createTheme({
             contrastText: "#000000",
         },
     },
-    components:{
-      MuiButton:{
-        styleOverrides:{
-          root:{
-            padding:'10px 30px'
-            
-          }
-        }
-      }
-    }
+    components: {
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    padding: "5px 30px",
+                    borderRadius: "0px",
+                },
+            },
+        },
+    },
 });
