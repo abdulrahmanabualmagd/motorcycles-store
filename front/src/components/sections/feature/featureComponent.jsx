@@ -1,15 +1,13 @@
-import { Typography, Container, Grid, Paper } from "@mui/material";
-import {useStyles} from "./style";
+import { Typography, Container, Grid } from "@mui/material";
+import { Paper, Section } from "./style";
 
 export default function FeatureComponent() {
-    const classes = useStyles();
-
     return (
-        <section className={classes.section}>
+        <Section>
             <Container maxWidth="md">
                 <Grid container spacing={4} justifyContent="center">
                     <Grid item xs={12}>
-                        <Paper className={classes.sectionContent} elevation={0}>
+                        <Paper elevation={0}>
                             <Typography variant="h4" component="h2" gutterBottom>
                                 Section 2 Title
                             </Typography>
@@ -20,6 +18,6 @@ export default function FeatureComponent() {
                     </Grid>
                 </Grid>
             </Container>
-        </section>
+        </Section>
     );
 }

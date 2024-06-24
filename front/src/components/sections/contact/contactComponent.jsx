@@ -1,23 +1,21 @@
-import { Typography, Container, Grid, TextField, Button } from "@mui/material";
-import {useStyles} from "./style";
+import { Typography, Container, Grid, TextField } from "@mui/material";
+import { Form, Section, Button } from "./style";
 
 export default function ContactComponent() {
-    const classes = useStyles();
-
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission logic here
     };
 
     return (
-        <section className={classes.section}>
+        <Section>
             <Container maxWidth="md">
                 <Typography variant="h4" align="center" gutterBottom>
                     Contact Us
                 </Typography>
                 <Grid container justifyContent="center">
                     <Grid item xs={12} md={8}>
-                        <form className={classes.form} onSubmit={handleSubmit}>
+                        <Form onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField fullWidth label="Name" variant="outlined" required />
@@ -36,20 +34,15 @@ export default function ContactComponent() {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        className={classes.submitButton}
-                                    >
+                                    <Button type="submit" variant="contained" color="primary">
                                         Send Message
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </form>
+                        </Form>
                     </Grid>
                 </Grid>
             </Container>
-        </section>
+        </Section>
     );
 }

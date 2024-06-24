@@ -1,10 +1,8 @@
 import { Typography, Container, Link } from "@mui/material";
-import { useStyles } from "./style";
+import { Footer } from "./style";
 export default function FooterComponent() {
-    const classes = useStyles();
-
     return (
-        <footer className={classes.footer}>
+        <Footer>
             <Container maxWidth="md">
                 <Typography variant="h6" align="center" gutterBottom>
                     MyWebsite
@@ -21,6 +19,6 @@ export default function FooterComponent() {
                     {". All rights reserved."}
                 </Typography>
             </Container>
-        </footer>
+        </Footer>
     );
 }
