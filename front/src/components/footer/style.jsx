@@ -1,8 +1,7 @@
-import { makeStyles } from "@mui/styles";
+import {styled} from "@mui/material";
 
-export const useStyles = makeStyles((theme) => ({
-    footer: {
-        padding: theme.spacing(6, 0),
-        backgroundColor: "#e9e2e2",
-    },
+export const Footer = styled("footer")(({ theme }) => ({
+        backgroundColor: theme.palette.primary.main,
+        padding: theme.spacing(6,0)
 }));
+

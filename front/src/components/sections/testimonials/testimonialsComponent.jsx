@@ -1,18 +1,16 @@
-import { Typography, Container, Grid, Card, CardContent } from "@mui/material";
-import { useStyles } from "./style";
+import { Typography, Container, Grid, CardContent } from "@mui/material";
+import { Card, Section } from "./style";
 
 export default function TestimonialsComponent() {
-    const classes = useStyles();
-
     return (
-        <section className={classes.section}>
+        <Section>
             <Container maxWidth="md">
                 <Typography variant="h4" align="center" gutterBottom>
                     Testimonials
                 </Typography>
                 <Grid container spacing={4} justifyContent="center">
                     <Grid item xs={12} md={4}>
-                        <Card className={classes.testimonialCard}>
+                        <Card>
                             <CardContent>
                                 <Typography variant="body1" gutterBottom>
                                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacinia risus eget
@@ -23,7 +21,7 @@ export default function TestimonialsComponent() {
                         </Card>
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <Card className={classes.testimonialCard}>
+                        <Card>
                             <CardContent>
                                 <Typography variant="body1" gutterBottom>
                                     "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
@@ -34,7 +32,7 @@ export default function TestimonialsComponent() {
                         </Card>
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <Card className={classes.testimonialCard}>
+                        <Card>
                             <CardContent>
                                 <Typography variant="body1" gutterBottom>
                                     "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
@@ -46,6 +44,6 @@ export default function TestimonialsComponent() {
                     </Grid>
                 </Grid>
             </Container>
-        </section>
+        </Section>
     );
 }

@@ -1,14 +1,13 @@
-import { makeStyles } from "@mui/styles";
+import { styled, Card as crd } from "@mui/material";
 
-export const useStyles = makeStyles((theme) => ({
-    section: {
-        padding: theme.spacing(8, 0),
-        backgroundColor: "#fff",
-        minHeight:'50vh'
-    },
-    testimonialCard: {
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-    },
+export const Section = styled("section")(({ theme }) => ({
+    padding: theme.spacing(8, 0),
+    backgroundColor: "#fff",
+    minHeight: "50vh",
+}));
+
+export const Card = styled(crd)(({ theme }) => ({
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
 }));

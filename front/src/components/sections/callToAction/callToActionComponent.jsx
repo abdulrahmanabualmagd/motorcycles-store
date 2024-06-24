@@ -1,11 +1,9 @@
-import { Typography, Container, Grid, Button } from "@mui/material";
-import { useStyles } from "./style";
+import { Typography, Container, Grid } from "@mui/material";
+import { Button, Section } from "./style";
 
 export default function CallToActionComponent() {
-    const classes = useStyles();
-
     return (
-        <section className={classes.section}>
+        <Section>
             <Container maxWidth="md">
                 <Grid container spacing={4} alignItems="center">
                     <Grid item xs={12} md={6}>
@@ -13,7 +11,7 @@ export default function CallToActionComponent() {
                             Section 4 Title
                         </Typography>
                         <Typography paragraph>Description of Section 4.</Typography>
-                        <Button variant="contained" color="primary" className={classes.button}>
+                        <Button variant="contained" color="primary">
                             Action Button
                         </Button>
                     </Grid>
@@ -22,6 +20,6 @@ export default function CallToActionComponent() {
                     </Grid>
                 </Grid>
             </Container>
-        </section>
+        </Section>
     );
 }

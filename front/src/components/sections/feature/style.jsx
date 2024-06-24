@@ -1,12 +1,11 @@
-import { makeStyles } from '@mui/styles';
+import { styled, Paper as ppr } from "@mui/material";
 
-export const useStyles = makeStyles((theme) => ({
-  section: {
+export const Section = styled("section")(({ theme }) => ({
     padding: theme.spacing(8, 0),
-    backgroundColor: '#f0f0f0',
-    minHeight:"50vh"
-  },
-  sectionContent: {
-    textAlign: 'center',
-  },
+    background: theme.palette.primary.main,
+    minHeight: "50vh",
+}));
+
+export const Paper = styled(ppr)(({ theme }) => ({
+    textAlign: "center",
 }));
